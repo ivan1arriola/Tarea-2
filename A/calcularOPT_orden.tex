@@ -1,0 +1,25 @@
+\subsubsection{Orden de Ejecución}
+
+El algoritmo \texttt{celda} tiene un tiempo de ejecución de $O(1)$, ya que simplemente consulta una entrada específica en la matriz $T$ y realiza, a lo sumo, tres comparaciones. Por lo tanto, su ejecución no depende del tamaño de la entrada.
+
+El algoritmo \texttt{CalcularOPT} se analiza a continuación:
+
+\begin{itemize}
+	\item La creación de la matriz $OPT$ es de orden $O(n^2)$,
+	      ya que se requiere espacio para almacenar los valores en una matriz de tamaño $n \times n$.
+	\item Las líneas 3, 4, 5 y 6 realizan asignaciones a valores de la matriz $OPT$,
+	      cada una de las cuales es de orden $O(1)$.
+	\item El bucle \texttt{for} que itera de 0 a $n+1$ es de orden $O(n)$, ya que efectivamente itera $n+1$ veces.
+	\item La comparación en la línea 10 es de orden $O(1)$.
+	\item La línea 13 consiste en una asignación de un valor calculado por \texttt{celda},
+	      que tiene un tiempo de ejecución de $O(1)$. Además, el cálculo del máximo entre dos números
+	      también se realiza en $O(1)$. Por lo tanto, esta línea es de orden $O(1)$ en total.
+	\item Las líneas 8 y 9 contienen un bucle anidado que realiza un total de $n^2$ ejecuciones,
+	      lo que da como resultado un tiempo de ejecución de $O(n^2)$.
+	\item Retornar la matriz en la línea 16 es de orden $O(1)$.
+\end{itemize}
+
+En resumen, el algoritmo \texttt{CalcularOPT} tiene un tiempo de ejecución que se puede describir
+como $O(n^2)$ debido a las operaciones más costosas dentro de los bucles anidados.
+
+\newpage

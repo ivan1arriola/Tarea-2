@@ -1,0 +1,29 @@
+\subsubsection{Definición de $OPT$}
+
+La función $OPT$ es la función que, dada una fila $f$ y una columna $c$, devuelve la máxima cantidad de celdas ocupadas por las que se puede pasar en un recorrido desde \( (f, c) \) hasta \( (n, n) \).
+
+Se define como:
+
+\[
+	OPT(f, c) =
+	\begin{cases}
+		celda(f, c)                                             & \text{si } f = n \text{ y } c = n, \\
+		                                                        & \text{o } f = n+1,                 \\
+		                                                        & \text{o } c = n+1,                 \\
+		                                                        & \text{o } f = 0,                   \\
+		                                                        & \text{o } c = 0,                   \\
+		celda(f, c) + \max\left(OPT(f, c+1), OPT(f+1, c)\right) & \text{en otro caso}.
+	\end{cases}
+\]
+
+Donde:
+
+\[
+	celda(f,c) =
+	\begin{cases}
+		1       & \text{si } (f,c) \text{ es una celda ocupada,}   \\
+		0       & \text{si } (f,c) \text{ es una celda libre,}     \\
+		-\infty & \text{si } (f,c) \text{ es una celda prohibida.}
+	\end{cases}
+\]
+

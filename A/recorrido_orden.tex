@@ -1,0 +1,20 @@
+\subsubsection{Orden de Ejecución}
+
+El algoritmo \texttt{Recorrido} se analiza a continuación:
+\begin{itemize}
+	\item 1. La llamada a \texttt{CalcularOPT} tiene un tiempo de ejecución de $O(n^2)$.
+	\item 2. La creación de Camino se puede hacer con una lista, que se puede crear en $O(1)$.
+	\item 3. La asignación de $(fila, col)$ es de orden $O(1)$.
+	\item 4. El bucle \texttt{while} se ejecuta hasta que $(fila, col) = (n, n)$, lo que puede ocurrir en el peor caso después de $2n$ iteraciones.
+	      Por lo tanto, el bucle tiene un tiempo de ejecución de $O(n)$.
+	\item 5. La comparación en la línea 5 es de orden $O(1)$.
+	\item 6. Crear y retornar una lista vacía es de orden $O(1)$.
+	\item 8. Agregar $(fila, col)$ a $Camino$ es de orden $O(1)$ porque agregar un elemento a una lista es una operación de tiempo constante.
+	\item 9. La comparación en la línea 9 es de orden $O(1)$.
+	\item 10. 12. La asignación de $(fila, col)$ es de orden $O(1)$.
+	\item 15. Agregar $(n, n)$ a $Camino$ es de orden $O(1)$.
+	\item 16. Retornar $Camino$ es de orden $O(1)$.
+\end{itemize}
+
+En resumen, el algoritmo \texttt{Recorrido} tiene un tiempo de ejecución que se puede describir
+como $O(n^2)$ debido a las operaciones más costosas dentro de los bucles anidados.

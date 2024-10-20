@@ -1,0 +1,37 @@
+% Tiempo de ejecución
+\subsection{Análisis de Complejidad}
+Para analizar el tiempo de ejecución de la función principal: \texttt{calcular\_resultado}, vamos a analizar por separado el tiempo de ejecución de las funciones que la componen:
+
+\texttt{inicializar\_OPT(n)}: Esta función inicializa las tablas que luego almacenarán el valor óptimo de celdas ocupadas visitadas para cada valor de \( k \) (siendo \( k \) la posición en la que se encuentra la diagonal de la matriz). Al mismo tiempo, nos indica el valor óptimo para el caso base, tomando como referencia el tipo de celda de la matriz (libre, ocupada o prohibida).
+
+Esta inicialización está compuesta por tres \texttt{FOR} anidados, dos de ellos recorren las filas y columnas de la matriz y el tercero nos asegura que este paso lo realizaremos para todos los posibles \( k \) que nos determinen la posición de una diagonal.
+
+Los valores posibles de filas y columnas se encuentran en el rango de \(\{1,\ldots,n\}\) y los de \( k \) en \(\{1,\ldots,\min\{n-c,f-1\}\}\) (con \( k \) teniendo a lo sumo \( n-1 \) valores).
+
+Por la regla del producto, los tres \texttt{FOR} anidados nos determinan:
+\[
+	O(n) \cdot O(n) \cdot O(n-1) = O(n^3)
+\]
+
+Las comparaciones usadas por el caso base son \( O(1) \). Por lo tanto, por la regla de la suma:
+\[
+	\text{Inicializar\_OPT es } O(1) + O(n^3) = O(n^3)
+\]
+
+\texttt{llenar\_OPT(n)}: Esta función tiene como fin el llenado de la tabla que contiene los valores óptimos de celdas ocupadas de dos recorridos distintos que parten desde la misma diagonal.
+
+Al igual que en la primera función, tenemos tres \texttt{FOR} anidados que determinan un tiempo de ejecución de partida de \( O(n^3) \) (esta vez \( k \) toma valores desde \(\{1,\ldots,n\}\), pero el tiempo de ejecución final se mantiene).
+
+Para determinar el tiempo de ejecución total, nos centraremos en el tiempo de ejecución del bloque que contiene el \texttt{FOR} más interno. En el cuerpo de este \texttt{FOR} solo se realizan comparaciones (basadas en los movimientos simultáneos posibles de los dos recorridos).
+
+El tiempo de cada comparación (instrucción \texttt{IF}) es el tiempo de evaluar la condición, más el mayor de los tiempos de las instrucciones en el \texttt{THEN} y el \texttt{ELSE}. Sin embargo, cada instrucción \texttt{IF} que se encuentra realiza asignaciones o comparaciones de \( O(1) \).
+
+Por la regla de la suma, todas estas comparaciones son \( O(1) \). Por lo tanto, el orden de \texttt{llenar\_OPT(n)} es el orden de los \texttt{FOR}:
+\[
+	\text{Llenar\_OPT es } O(n^3)
+\]
+
+Por último, la función \texttt{calcular\_resultado(n)} realiza la inicialización y el llenado de tablas. Su tiempo de ejecución se compone de:
+\[
+	\text{Calcular\_resultado es } O(n^3) + O(n^3) = O(n^3)
+\]

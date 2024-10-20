@@ -1,0 +1,29 @@
+\subsubsection{Algoritmo}
+
+\begin{algorithm}
+	\caption{Recorrido}
+	\label{alg:recorrido}
+	\textbf{Entrada:} Tablero $T$, $n$: tamaño del tablero \\
+	\textbf{Salida:} Camino de $(1,1)$ a $(n,n)$ que maximiza la cantidad de celdas ocupadas visitadas
+	\begin{algorithmic}[1]
+		\State Crear matriz $OPT \gets \text{CalcularOPT}(T, n)$
+		\State Crear $Camino$, un conjunto ordenado
+		\State Sea $(fila, col) \gets (1, 1)$
+
+		\While{$(fila, col) \neq (n, n)$}
+		\If{$OPT[fila, col] = -\infty$}
+		\State \Return conjunto vacío \Comment{Termina ejecución aquí}
+		\EndIf
+		\State Agregar $(fila, col)$ a $Camino$
+
+		\If{$OPT[fila+1, col] > OPT[fila, col+1]$}
+		\State $(fila, col) \gets (fila+1, col)$
+		\Else
+		\State $(fila, col) \gets (fila, col+1)$
+		\EndIf
+		\EndWhile
+
+		\State Agregar $(n, n)$ a $Camino$
+		\State \Return $Camino$
+	\end{algorithmic}
+\end{algorithm}

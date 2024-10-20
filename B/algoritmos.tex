@@ -1,0 +1,103 @@
+\subsection{Algoritmo}
+\begin{algorithm}
+    \caption{Inicializar OPT}
+    \label{alg:inicializarOPT}
+    \textbf{Entrada:} Cuadrícula $matriz[f, c]$ donde cada celda $(f, c)$ tiene el valor \{'O': ocupada, 'L': libre, 'X': prohibida\}, $n$: tamaño de la cuadrícula \\
+    \textbf{Salida:} Tabla tridimensional $OPT[f, c, k]$ inicializada con los valores base
+
+    \begin{algorithmic}[1]
+        \State \textbf{Definir} $opt[N][N][N]$ \Comment{Tabla tridimensional para almacenar el valor de OPT}
+        \State \textbf{Definir} $matriz[N][N]$ \Comment{Cuadrícula de entrada}
+
+        \For{$f \gets 1$ \textbf{hasta} $n$} \Comment{Iterar sobre las filas}
+            \For{$c \gets 1$ \textbf{hasta} $n$} \Comment{Iterar sobre las columnas}
+                \For{$k \gets 0$ \textbf{hasta} $n$} \Comment{Iterar sobre $k$}
+                    \State $opt[f][c][k] \gets -\infty$ \Comment{Inicializamos con $-\infty$}
+                \EndFor
+            \EndFor
+        \EndFor
+        
+        \If{$matriz[n][n] = 'O'$} 
+            \State $opt[n][n][0] \gets 1$ \Comment{Celda ocupada}
+        \ElsIf{$matriz[n][n] = 'L'$}
+            \State $opt[n][n][0] \gets 0$ \Comment{Celda libre}
+        \Else
+            \State $opt[n][n][0] \gets -\infty$ \Comment{Celda prohibida}
+        \EndIf
+    \end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}
+    \caption{Llenar OPT}
+    \label{alg:llenarOPT}
+    \textbf{Entrada:} Cuadrícula $matriz[f, c]$ donde cada celda $(f, c)$ tiene el valor \{'O': ocupada, 'L': libre, 'X': prohibida\}, $n$: tamaño de la cuadrícula \\
+    \textbf{Salida:} Tabla tridimensional $OPT[f, c, k]$ llenada con los valores calculados
+
+    \begin{algorithmic}[1]
+        \For{$f \gets n$ \textbf{hasta} $1$} \Comment{Iterar desde $(n, n)$ hasta $(1, 1)$}
+            \For{$c \gets n$ \textbf{hasta} $1$} 
+                \For{$k \gets 0$ \textbf{hasta} $n$}
+                    \State $f_k \gets f - k$
+                    \State $c_k \gets c + k$
+                    
+                    \If{$f_k < 1$ \textbf{or} $c_k > n$} \Comment{Ignorar si sale de la cuadrícula}
+                        \State \textbf{continue}
+                    \EndIf
+
+                    \If{$matriz[f][c] = 'X'$ \textbf{or} $matriz[f_k][c_k] = 'X'$} \Comment{Verificar si alguna celda es prohibida}
+                        \State $opt[f][c][k] \gets -\infty$
+                        \State \textbf{continue}
+                    \EndIf
+
+                    \State $ocupadas \gets 0$
+                    \If{$f = f_k$ \textbf{and} $c = c_k$} \Comment{Misma celda en ida y vuelta}
+                        \State $ocupadas \gets (matriz[f][c] = 'O')? 1 : 0$
+                    \Else
+                        \If{$matriz[f][c] = 'O'$} 
+                            \State $ocupadas \gets ocupadas + 1$
+                        \EndIf
+                        \If{$matriz[f_k][c_k] = 'O'$} 
+                            \State $ocupadas \gets ocupadas + 1$
+                        \EndIf
+                    \EndIf
+                    
+                    \State $max\_valor \gets -\infty$ \Comment{Inicializamos el valor máximo como $-\infty$}
+                    
+                    \If{$c + 1 \leq n$ \textbf{and} $c_k + 1 \leq n$} \Comment{Movimiento 1: ambos caminos hacia la derecha}
+                        \State $max\_valor \gets \max(max\_valor, opt[f][c + 1][k] + ocupadas)$
+                    \EndIf
+
+                    \If{$c + 1 \leq n$ \textbf{and} $f_k + 1 \leq n$} \Comment{Movimiento 2: ida derecha, vuelta abajo}
+                        \State $max\_valor \gets \max(max\_valor, opt[f][c + 1][k - 1] + ocupadas)$
+                    \EndIf
+
+                    \If{$f + 1 \leq n$ \textbf{and} $c_k + 1 \leq n$} \Comment{Movimiento 3: ida abajo, vuelta derecha}
+                        \State $max\_valor \gets \max(max\_valor, opt[f + 1][c][k + 1] + ocupadas)$
+                    \EndIf
+
+                    \If{$f + 1 \leq n$ \textbf{and} $f_k + 1 \leq n$} \Comment{Movimiento 4: ambos caminos hacia abajo}
+                        \State $max\_valor \gets \max(max\_valor, opt[f + 1][c][k] + ocupadas)$
+                    \EndIf
+
+                    \State $opt[f][c][k] \gets max\_valor$ \Comment{Asignar el valor máximo a $opt[f][c][k]$}
+                \EndFor
+            \EndFor
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{Calcular Resultado}
+    \label{alg:calcularResultado}
+    \textbf{Entrada:} Cuadrícula $matriz[f, c]$ de tamaño $n$ \\
+    \textbf{Salida:} $OPT[1, 1, 0]$: el resultado final calculado por la tabla OPT
+
+    \begin{algorithmic}[1]
+        \State Inicializar la tabla OPT con valores base usando \textbf{Inicializar OPT}
+        \State Llenar la tabla OPT usando \textbf{Llenar OPT}
+        \State \Return $opt[1][1][0]$
+    \end{algorithmic}
+\end{algorithm}
+
+\newpage

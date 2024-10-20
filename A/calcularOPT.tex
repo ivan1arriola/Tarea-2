@@ -1,0 +1,48 @@
+\subsubsection{Algoritmo}
+\begin{algorithm}
+	\caption{CalcularOPT}
+	\label{alg:calcularOPT}
+	\textbf{Entrada:} Tablero $T[fila, col]$ donde cada celda $(fila, col)$ tiene el valor \{libre, ocupado, prohibido\}; $n$: tamaño del tablero \\
+	\textbf{Salida:} $OPT[fila, col]$: cantidad máxima de celdas ocupadas que se pueden alcanzar
+	\begin{algorithmic}[1]
+
+		\State Crear matriz $OPT$
+
+		\For{$k \gets 0$ \textbf{hasta} $n+1$}
+		\State $OPT[k, n+1] \gets -\infty$
+		\State $OPT[n+1, k] \gets -\infty$
+		\State $OPT[k, 0] \gets -\infty$
+		\State $OPT[0, k] \gets -\infty$
+		\EndFor
+
+		\For{$f \gets n$ \textbf{hasta} $1$} \Comment{Iterar sobre filas}
+		\For{$c \gets n$ \textbf{hasta} $1$} \Comment{Iterar sobre columnas}
+		\If{$(f, c) = (n, n)$} \Comment{Saltear la celda $(n, n)$}
+		\State $OPT[n, n] \gets \text{celda}(n, n)$
+		\EndIf
+		\State $OPT[f, c] \gets \text{celda}(f, c) + \max(OPT[f+1, c], OPT[f, c+1])$
+		\EndFor
+		\EndFor
+
+		\State  \Return $OPT$
+	\end{algorithmic}
+\end{algorithm}
+
+Se usa el algoritmo auxiliar \texttt{celda}:
+
+\begin{algorithm}
+	\caption{celda}
+	\label{alg:celda}
+	\textbf{Entrada:} $(f, c)$: posición de la celda; $T[fila, col]$: tablero donde cada celda tiene un valor \{libre, ocupado, prohibido\} \\
+	\textbf{Salida:} Valor de la celda en función de si está ocupada, libre o prohibida
+	\begin{algorithmic}[1]
+		\If{$T[f, c] = \text{ocupada}$}
+		\State \Return $1$ \Comment{La celda está ocupada}
+		\ElsIf{$T[f, c] = \text{libre}$}
+		\State \Return $0$ \Comment{La celda está libre}
+		\ElsIf{$T[f, c] = \text{prohibida}$}
+		\State \Return $-\infty$ \Comment{La celda es prohibida}
+		\EndIf
+	\end{algorithmic}
+\end{algorithm}
+

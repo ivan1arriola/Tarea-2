@@ -1,0 +1,53 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{geometry}          % Para controlar márgenes y tamaños
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{hyperref}          % Paquete para metadata y enlaces interactivos
+
+% Configuración de márgenes equivalente
+\geometry{
+    left=0.5in,
+    right=0.5in,
+    top=0.5in,
+    bottom=1in
+}
+
+\setlength{\parindent}{0em}    % No sangría en los párrafos
+\setlength{\parskip}{2ex}      % Espacio entre párrafos
+
+\renewcommand\thesection{\Alph{section}} % Secciones con letras
+\renewcommand\thesubsection{\Roman{subsection}} % Subsecciones con números romanos
+\renewcommand\thesubsubsection{\arabic{subsubsection}} % Subsubsecciones con números normales
+
+
+% Metadata del PDF
+\hypersetup{
+    pdfauthor={Grupo 149},      % Nombre del autor
+    pdftitle={Tarea 2 de Programación 3},      % Título del documento
+    pdfsubject={Recorridos en cuadrículas},    % Asunto
+    pdfkeywords={recorridos, algoritmos, programación}, % Palabras clave
+    colorlinks=true,                           % Activar enlaces interactivos
+    linkcolor=blue                             % Color de los enlaces
+}
+
+\title{Tarea 2 de Programación 3}
+\author{Grupo 149}  
+\date{Lunes, 21 de octubre de 2024}
+
+\begin{document}
+
+\maketitle
+
+% Tabla con Nombre, Apellido y Cedula de los 4 integrantes
+
+\newpage
+
+\textbf{Problema: Recorrido de Ida y Vuelta}
+\input{parteA}
+\input{parteB}
+
+\end{document}

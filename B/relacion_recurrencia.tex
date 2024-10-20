@@ -1,0 +1,38 @@
+\subsection{Relación de recurrencia}
+
+Primero definimos la función \texttt{celda}:
+\[
+	\text{celda}(f, c, k) =
+	\begin{cases}
+		-\infty & \text{si } k < 0 \text{ o } k > \min\{n - c, f - 1\},                            \\
+		        & \text{o si } (f, c) \text{ o } (f-k, c+k) \text{ es una celda prohibida},        \\ \\
+		0       & \text{si } (f, c) \text{ y } (f-k, c+k) \text{ son celdas libres},               \\  \\
+		1       & \text{si } (f, c) \text{ es una celda ocupada y } (f-k, c+k) \text{ es libre},   \\
+		        & \text{o si } (f-k, c+k) \text{ es una celda ocupada y } (f, c) \text{ es libre}, \\
+		        & \text{o si } (f, c) \text{ es ocupada y } k = 0.                                 \\ \\
+		2       & \text{si } (f, c) \text{ y } (f-k, c+k) \text{ son celdas ocupadas y } k \neq 0,
+	\end{cases}
+\]
+
+
+Luego, definimos la relación de recurrencia para $OPT(f, c, k)$:
+Dado un punto $(f, c)$ y un $k$, nuestro $OPT(f, c, k)$ devolverá la cantidad máxima de celdas ocupadas por las que puede pasar en un recorrido de ida desde $(f, c)$
+hasta $(n, n)$ y uno de vuelta desde $(n, n)$ hasta $(f - k, c + k)$. A la ida, solo se podrá mover hacia la derecha y hacia abajo, mientras que a la vuelta lo hará
+hacia la izquierda y hacia arriba, moviéndose una celda a la vez.
+
+\[
+	OPT(f, c, k) =
+	\begin{cases}
+		\text{Celda}(f, c, k) & \text{si } f = n \text{ y } c = n, \\
+		                      & \text{o si } f \in \{0, n+1\},     \\
+		                      & \text{o si } c \in \{0, n+1\},     \\ \\
+		\text{Celda}(f, c, k) + \max\left\{
+		\begin{array}{l}
+			OPT(f, c+1, k),   \\
+			OPT(f+1, c, k),   \\
+			OPT(f+1, c, k-1), \\
+			OPT(f, c+1, k-1)
+		\end{array}
+		\right\}              & \text{en otro caso}.
+	\end{cases}
+\]
