@@ -1,4 +1,4 @@
-\subsubsection{Justificación de la Correctitud:}
+\subsubsection{Justificación de la Correctitud}
 
 La relación de recurrencia termina al alcanzar la celda $(n,n)$ o al llegar a la fila $n+1$ o a la columna $n+1$. \\
 Al empezar en \( (f,c) \), siempre nos moveremos hacia abajo o hacia la derecha. No es posible movernos infinitamente hacia abajo, ya que la fila $n+1$ tiene todas las celdas prohibidas, haciendo que \( OPT(n+1,c) \) siempre sea $-\infty$ sin más llamadas recursivas. Lo mismo ocurre al movernos infinitamente a la derecha, ya que se alcanza la columna $n+1$, que también tiene todas las celdas prohibidas.\\

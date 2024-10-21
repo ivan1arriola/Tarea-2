@@ -1,1 +1,32 @@
-\subsection{Correctitud de la Recurrencia}
+\subsubsection{Correctitud de la Recurrencia}
+
+Para demostrar la correctitud de la recurrencia, primero vamos a demostrar que la recurrencia
+termina y luego vamos a demostrar que la solución es correcta.
+
+\paragraph{Terminación de la Recurrencia}
+
+Para demostrar que la recurrencia termina, vamos a demostrar que eventualmente llegamos a un caso base.
+
+Para cualquier celda $(i, j)$ y $k$ cualquiera, la recurrencia puede caer en uno de los siguientes casos:
+[1] $i = n$ y $j = n$,
+[2] $i \in \{0, n+1\}$,
+[3] $j \in \{0, n+1\}$,
+[4] Ninguna de las anteriores.
+
+En el caso [1], la recurrencia llega a un caso base, ya que se llegó a la celda $(n, n)$ y el algoritmo termina.
+
+En el caso [2] y [3], la recurrencia llega a un caso base, ya que se llegó a una celda fuera de la cuadrícula y 
+se llama a la función \texttt{celda} sin mas iteraciones.
+
+En el caso [4], se llama a la función \texttt{celda} que devuelve un valor que se suma a la llamada recursiva
+de la recurrencia. En cada llamada recursiva, se va a mover a la derecha o hacia abajo, creciendo monotonamente
+la fila o la columna. Como solo existen $n$ filas y $n$ columnas, la cantidad de llamadas recursivas no puede ser
+mayor a $2n$ porque eventualmente se llegará a uno de los casos [1], [2] o [3].
+
+\paragraph{Correctitud de la Recurrencia}
+Vamos a demostrar que la recurrencia es correcta por inducción en las filas, columnas y $k$.
+
+\paragraph{Caso Base} 
+Para el caso base, vamos a demostrar que la recurrencia es correcta para las celdas $(n, n)$, $(0, j)$, $(i, 0)$ y $(n+1, j)$, $(i, n+1)$.
+con $i$ y $j$ entre $0$ y $n+1$ y $k$ entre $0$ y $n+1$.
+Para la celda $(n, n)$, la recurrencia devuelve el valor de la celda, que es la cantidad de celdas ocupadas en la celda $(n, n)$.

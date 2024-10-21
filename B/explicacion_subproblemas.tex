@@ -1,51 +1,77 @@
-\subsection{Subproblemas}
+\subsubsection{Identificación de subproblemas}
 
-\subsubsection{Semántica del OPT}
-Dado el punto $(f, c)$ y un $k$, nuestro $OPT(f, c, k)$ devolverá la cantidad máxima de celdas ocupadas por las que puede pasar en un recorrido de ida desde $(f, c)$
-hasta $(n, n)$ y uno de vuelta desde $(n, n)$ hasta $(f - k, c + k)$. A la ida, solo se podrá mover hacia la derecha y hacia abajo, mientras que a la vuelta lo hará
-hacia la izquierda y hacia arriba, moviéndose una celda a la vez.
-De no existir un recorrido válido, devolverá $-\infty$.
+\paragraph{Semántica del Problema}
+En este problema, consideramos un recorrido doble: uno de ida desde una celda 
+de inicio $(f, c)$ hasta la celda $(n, n)$, y otro de vuelta desde $(n, n)$ 
+hasta una celda de destino $(f - k, c + k)$. El objetivo de $OPT(f, c, k)$ 
+es calcular la máxima cantidad de celdas ocupadas por las que se puede pasar 
+en ambos recorridos. Si no es posible realizar un recorrido válido, 
+el valor devuelto será $-\infty$.
 
-\subsubsection{Movimientos y diagonales}
-Dado el problema B)I, nuestro algoritmo calcula el $OPT$ de ida desde la celda de salida $(f, c)$ hasta $(n, n)$ y el de vuelta desde $(n, n)$ hasta $(f - k, c + k)$ simultáneamente,
-encarando la vuelta como si el recorrido $(n, n) \to (f - k, c + k)$ fuese de ida, es decir, desde $(f - k, c + k)$ hasta $(n, n)$.
+\paragraph{Subproblema 1: Movimientos Simultáneos en el Recorrido de Ida y Vuelta}
 
-Por definición del problema, en los viajes de ida los movimientos permitidos son hacia la derecha y hacia abajo, moviéndose una casilla por vez. Dado que hay dos viajes simultáneos,
-las instancias de movimiento posibles son permutaciones de derecha y abajo, resultando en 4 posibilidades:
+En este problema, nuestro algoritmo calcula el valor $OPT$ de ida desde la celda de salida 
+$(f, c)$ hasta $(n, n)$, y el de vuelta desde $(n, n)$ hasta $(f - k, c + k)$ simultáneamente. 
+Para ello, consideramos el recorrido de vuelta como si fuese de ida, es decir, desde 
+$(f - k, c + k)$ hasta $(n, n)$.
+
+Por definición, en el recorrido de ida, los movimientos permitidos son hacia la derecha y 
+hacia abajo, moviéndose una casilla por vez. Dado que hay dos recorridos que se realizan 
+simultáneamente, las combinaciones posibles de movimiento se pueden describir como 
+permutaciones de derecha y abajo, resultando en cuatro opciones:
+
 \begin{enumerate}
-	\item $i_1$: derecha e $i_2$: derecha
-	\item $i_1$: derecha e $i_2$: abajo
-	\item $i_1$: abajo e $i_2$: derecha
-	\item $i_1$: abajo e $i_2$: abajo
+    \item $i_1$: derecha y $i_2$: derecha
+    \item $i_1$: derecha y $i_2$: abajo
+    \item $i_1$: abajo y $i_2$: derecha
+    \item $i_1$: abajo y $i_2$: abajo
 \end{enumerate}
 
-Dado que los movimientos son de una casilla a la vez para ambos recorridos y estos se mueven a la vez, para todo $j$ los recorridos siempre están en una misma diagonal,
-donde la suma del índice $f$ y el índice $c$ es una constante. En todo movimiento, cada recorrido aumentará el índice $f$ o $c$ en uno. Sea:
+Dado que los movimientos son de una casilla a la vez para ambos recorridos y se realizan 
+simultáneamente, en todo momento, para un paso $j$, los recorridos permanecen en la misma 
+diagonal. Esto se debe a que la suma de los índices $f$ y $c$ es constante. 
+
+En cada movimiento, cada recorrido aumentará el índice $f$ o $c$ en uno. Definimos:
+
+\begin{align*}
+\text{Posición inicial:} & \quad f + c = (f - k) + (c + k) \\
+\text{Nueva posición:} & \quad f + c + j = (f - k) + (c + k) + j
+\end{align*}
+
+donde $j$ es la cantidad de movimientos realizados. A partir de esta relación, podemos 
+concluir que ambos recorridos se encuentran en la posición $(n, n)$ tras realizar la misma 
+cantidad de pasos y debemos considerar cómo esta restricción afecta 
+los movimientos disponibles y la optimización de celdas ocupadas.
+
+\paragraph{Subproblema 2: $k = 0$ y Celdas Prohibidas}
+Un segundo subproblema se presenta cuando ambos recorridos pasan por las mismas celdas ocupadas, es decir, 
+cuando $k = 0$. En estos casos, es fundamental asegurar que las celdas compartidas se cuenten solo una vez.
+
+Para manejar esta situación, se implementa una función auxiliar llamada \texttt{celda}. 
+Esta función toma como argumentos la fila, la columna y el valor de $k$, y 
+devuelve la cantidad de celdas ocupadas en el conjunto 
 \[
-	f + c = (f - k) + (c + k)
+\{(f, c), (f - k, c + k)\}.
 \]
-Posición inicial:
+
+Además, la función toma en cuenta si las celdas de ida y de vuelta son la misma.
+
+Por último, la función $OPT(f, c, k)$ debe evitar cualquier recorrido que pase por celdas prohibidas, 
+evitando estas celdas en la respuesta final.
+
+\paragraph{Subproblema 3: Maximización simultánea de ambos recorridos}
+
+El algoritmo $OPT$ considera que, si ambos recorridos pasan por las mismas celdas ocupadas, 
+estas solo se contabilizan una vez en el recorrido de ida ($i_1$). 
+
+Por lo tanto, al calcular el máximo para el recorrido de vuelta ($i_2$), 
+el algoritmo prioriza el camino que maximiza el número de celdas ocupadas, 
+tratando las celdas comunes como si fueran celdas libres.
+
+En función de cómo opera la función $\max(,)$ y de la asignación de valores a las celdas ocupadas, 
+el algoritmo $OPT$ seguirá un orden de prioridad definido, donde:
 \[
-	f + c + j = (f - k) + (c + k) + j
+\text{prohibida} < \text{libre} < \text{ocupada}
 \]
-con $j$ siendo la cantidad de movimientos. Dada esta relación, podemos determinar que ambos recorridos se encuentran en $(n, n)$ en la misma cantidad de pasos.
-
-\subsubsection{Celdas compartidas y prohibidas}
-Dado que ambos recorridos siempre están en la misma diagonal, puede darse el caso de que tengan celdas en común en el recorrido que maximiza el paso por celdas ocupadas.
-De ser así, el recorrido total solo contará la primera vez que se pase por una celda ocupada, pudiendo resultar en un recorrido erróneo.
-Para controlar estos casos, nuestro $OPT$ contará con una función auxiliar llamada \texttt{celda}, la cual asigna valores a las celdas, siendo libres, ocupadas o prohibidas,
-asignándoles $0$, $1$ o $-\infty$, respectivamente.
-
-Sabiendo que ambos recorridos son simultáneos y con la misma cantidad de movimientos, si los recorridos tienen celdas comunes, ambos estarán en ellas a la vez,
-facilitando la comparación y la asignación correcta de valores para cada celda. En cuanto a las celdas prohibidas, el valor asignado es $-\infty$
-de forma que al llamar a la función $\max(,)$, nunca se elegirá un camino que pase por una celda prohibida.
-
-\subsubsection{Maximización simultánea}
-Por lo desarrollado en la Sección 2, ya sabemos que el $OPT$, en caso de pasar por las mismas celdas ocupadas, las considerará solo una vez en $i_1$.
-Siendo así, cuando se llame a la función $\max$ para $i_2$, priorizará el camino que maximice las celdas ocupadas tomando las celdas comunes como si estuvieran libres.
-
-Por el funcionamiento de $\max(,)$ y la asignación de valores de \texttt{Ocupadas}, nuestro $OPT$ tendrá un orden de prioridad tal que:
-\[
-	\text{prohibida} < \text{libre} < \text{ocupada}
-\]
-donde se desprende que $-\infty < 0 < 1$, maximizando así el paso por celdas ocupadas para ambos recorridos.
+Esto implica que $-\infty < 0 < 1 < 2$, permitiendo así maximizar el número de celdas ocupadas alcanzadas en 
+cada diagonal del recorrido.
