@@ -21,18 +21,19 @@ hasta $(n, n)$ y uno de vuelta desde $(n, n)$ hasta $(f - k, c + k)$. A la ida, 
 hacia la izquierda y hacia arriba, moviéndose una celda a la vez.
 
 \[
-	OPT(f, c, k) =
-	\begin{cases}
-		\text{Celda}(f, c, k) & \text{si } f = n \text{ y } c = n, \\
-		                      & \text{o si } f \in \{0, n+1\},     \\
-		                      & \text{o si } c \in \{0, n+1\},     \\ \\
-		\text{Celda}(f, c, k) + \max\left\{
-		\begin{array}{l}
-			OPT(f, c+1, k),   \\
-			OPT(f+1, c, k),   \\
-			OPT(f+1, c, k-1), \\
-			OPT(f, c+1, k-1)
-		\end{array}
-		\right\}              & \text{en otro caso}.
-	\end{cases}
+OPT(f, c, k) =
+\begin{cases}
+\text{Celda}(f, c, k) & \text{si } f = n \text{ y } c = n, \\ 
+                      & \text{o si } f \in \{0, n+1\}, \\ 
+                      & \text{o si } c \in \{0, n+1\}, \\ 
+                      & \text{o si } k < 0 \text{ o } k > \min\{n - c, f - 1\}, \\ \\ 
+\text{Celda}(f, c, k) + \max\left\{ 
+\begin{array}{l}
+OPT(f, c+1, k), \\ 
+OPT(f+1, c, k), \\ 
+OPT(f+1, c, k+1), \\ 
+OPT(f, c+1, k-1) 
+\end{array} 
+\right\} & \text{en otro caso}.
+\end{cases}
 \]

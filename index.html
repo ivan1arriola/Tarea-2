@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablero NxN</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .board {
+            display: grid;
+            margin-top: 20px;
+        }
+
+        .cell {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+        }
+
+        .inputs {
+            margin-bottom: 10px;
+        }
+
+        .inputs input {
+            margin: 5px;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .overlap {
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                black 10px,
+                black 20px
+            );
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Tablero NxN</h1>
+
+    <div class="inputs">
+        <label for="n">Tamaño del tablero (n):</label>
+        <input type="number" id="n" value="5" min="1">
+    </div>
+
+    <!-- Combinación 1 a 5 -->
+    <div class="inputs">
+        <h3>Combinaciones</h3>
+        <div>
+            <label for="i1">i1:</label><input type="number" id="i1" value="1" min="1">
+            <label for="j1">j1:</label><input type="number" id="j1" value="1" min="1">
+            <label for="k1">k1:</label><input type="number" id="k1" value="1" min="0">
+        </div>
+        <div>
+            <label for="i2">i2:</label><input type="number" id="i2" value="1" min="1">
+            <label for="j2">j2:</label><input type="number" id="j2" value="1" min="1">
+            <label for="k2">k2:</label><input type="number" id="k2" value="1" min="0">
+        </div>
+        <div>
+            <label for="i3">i3:</label><input type="number" id="i3" value="1" min="1">
+            <label for="j3">j3:</label><input type="number" id="j3" value="1" min="1">
+            <label for="k3">k3:</label><input type="number" id="k3" value="1" min="0">
+        </div>
+        <div>
+            <label for="i4">i4:</label><input type="number" id="i4" value="1" min="1">
+            <label for="j4">j4:</label><input type="number" id="j4" value="1" min="1">
+            <label for="k4">k4:</label><input type="number" id="k4" value="1" min="0">
+        </div>
+        <div>
+            <label for="i5">i5:</label><input type="number" id="i5" value="1" min="1">
+            <label for="j5">j5:</label><input type="number" id="j5" value="1" min="1">
+            <label for="k5">k5:</label><input type="number" id="k5" value="1" min="0">
+        </div>
+    </div>
+
+    <div class="error" id="error"></div>
+    <div id="board" class="board"></div>
+
+    <script>
+        function generateBoard() {
+            const n = parseInt(document.getElementById('n').value);
+
+            const colors = ["yellow", "lightgreen", "lightblue", "orange", "pink"];
+            const coordinates = [];
+            let errorMessages = [];
+
+            for (let c = 1; c <= 5; c++) {
+                const i = parseInt(document.getElementById(`i${c}`).value) - 1;
+                const j = parseInt(document.getElementById(`j${c}`).value) - 1;
+                const k = parseInt(document.getElementById(`k${c}`).value);
+
+                const finalI = i - k;
+                const finalJ = j + k;
+
+                // Validar si las coordenadas están dentro del tablero
+                if (i < 0 || i >= n || j < 0 || j >= n || finalI < 0 || finalI >= n || finalJ < 0 || finalJ >= n) {
+                    errorMessages.push(`Error: La combinación (${i + 1}, ${j + 1}, ${k}) se sale del tablero.`);
+                } else {
+                    coordinates.push({i, j, color: colors[c - 1]});
+                    coordinates.push({i: finalI, j: finalJ, color: colors[c - 1]});
+                }
+            }
+
+            const boardElement = document.getElementById('board');
+            boardElement.innerHTML = ''; // Limpiar el tablero anterior
+            document.getElementById('error').textContent = errorMessages.join('\n'); // Mostrar errores si existen
+
+            // Ajustar tamaño del grid
+            boardElement.style.gridTemplateColumns = `repeat(${n}, 50px)`;
+            boardElement.style.gridTemplateRows = `repeat(${n}, 50px)`;
+
+            const cellMap = {}; // Almacenar las celdas ya ocupadas
+
+            // Generar las celdas del tablero
+            for (let row = 0; row < n; row++) {
+                for (let col = 0; col < n; col++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+
+                    const coord = coordinates.find(coord => coord.i === row && coord.j === col);
+                    if (coord) {
+                        if (cellMap[`${row}-${col}`]) {
+                            // Si ya está ocupada, marcar como superposición
+                            cell.classList.add('overlap');
+                        } else {
+                            // Asignar color si no está ocupada
+                            cell.style.backgroundColor = coord.color;
+                            cellMap[`${row}-${col}`] = true;
+                        }
+                    }
+
+                    boardElement.appendChild(cell);
+                }
+            }
+        }
+
+        // Añadir eventos de escucha para actualizar automáticamente todas las combinaciones
+        document.getElementById('n').addEventListener('input', generateBoard);
+        for (let c = 1; c <= 5; c++) {
+            document.getElementById(`i${c}`).addEventListener('input', generateBoard);
+            document.getElementById(`j${c}`).addEventListener('input', generateBoard);
+            document.getElementById(`k${c}`).addEventListener('input', generateBoard);
+        }
+
+        // Generar el tablero inicialmente
+        generateBoard();
+    </script>
+</body>
+</html>

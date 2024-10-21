@@ -1,69 +1,55 @@
 \subsubsection{Justificación de la Correctitud}
 
-La relación de recurrencia termina al alcanzar la celda $(n,n)$ o al llegar a la fila $n+1$ o a la columna $n+1$. \\
-Al empezar en \( (f,c) \), siempre nos moveremos hacia abajo o hacia la derecha. No es posible movernos infinitamente hacia abajo, ya que la fila $n+1$ tiene todas las celdas prohibidas, haciendo que \( OPT(n+1,c) \) siempre sea $-\infty$ sin más llamadas recursivas. Lo mismo ocurre al movernos infinitamente a la derecha, ya que se alcanza la columna $n+1$, que también tiene todas las celdas prohibidas.\\
-Si comenzamos en la fila o columna $0$, la ejecución termina en ese momento.\\
+La relación de recurrencia termina al alcanzar la celda $(n,n)$ o al llegar a la fila $n+1$ o a la columna $n+1$. 
+Al empezar en $(f,c)$, siempre nos moveremos hacia abajo o hacia la derecha. No es posible movernos infinitamente hacia abajo, ya que la fila $n+1$ tiene todas las celdas prohibidas, haciendo que $OPT(n+1,c)$ siempre sea $-\infty$ sin más llamadas recursivas. Lo mismo ocurre al movernos infinitamente a la derecha, ya que se alcanza la columna $n+1$, que también tiene todas las celdas prohibidas. 
+Si comenzamos en la fila o columna $0$, la ejecución termina en ese momento. 
 
 \subsubsection{Correctitud de los valores de $OPT$}
 
-Sea $T(n)$ un tablero de $0$ a $n+1$ filas y de $0$ a $n+1$ columnas,
-donde las filas y columnas $0$ y $n+1$ contienen valores prohibidos. \\
+Sea $T(n)$ un tablero de $0$ a $n+1$ filas y de $0$ a $n+1$ columnas, donde las filas y columnas $0$ y $n+1$ contienen valores prohibidos.
 
-Vamos a demostrar que los valores calculados por $OPT$ son correctos mediante inducción.\\
+Vamos a demostrar que los valores calculados por $OPT$ son correctos mediante inducción.
 
-\textbf{Paso Base:} \\
+\paragraph{Paso Base:} 
+\underline{Caso 1: $(f,c) = (n,n)$} 
 
-\underline{Caso 1: $(f,c) = (n,n)$} \\\\
 Por definición de $OPT$:
 \[
-	OPT(n,n) = celda(n,n)
+OPT(n,n) = celda(n,n) 
 \]
 Tenemos tres casos posibles:
 \begin{itemize}
-	\item Si $(n,n)$ es libre, el valor será $0$, lo cual es correcto porque no existen celdas ocupadas por alcanzar.
-	\item Si $(n,n)$ está ocupada, el valor será \( 1 \), lo cual es correcto porque alcanzamos solamente la celda $(n,n)$ y estaba ocupada.
-	\item Si $(n,n)$ es prohibida, el valor será $-\infty$, lo cual es correcto porque no es posible alcanzar alguna celda.
+    \item Si $(n,n)$ es libre, el valor será $0$, lo cual es correcto porque no existen celdas ocupadas por alcanzar.
+    \item Si $(n,n)$ está ocupada, el valor será $1$, lo cual es correcto porque alcanzamos solamente la celda $(n,n)$ y estaba ocupada.
+    \item Si $(n,n)$ es prohibida, el valor será $-\infty$, lo cual es correcto porque no es posible alcanzar alguna celda.
 \end{itemize}
-\underline{Caso 2: Alcanzamos una fila o columna $0$ o $n+1$} \\
 
-En estos casos, por definición de $OPT$ y de $T(n)$, los valores serán $-\infty$.
-Sin importar cómo se haya llegado a esas celdas,
-representan correctamente el hecho de que no son celdas válidas para realizar el recorrido.\\
+\underline{Caso 2: Alcanzamos una fila o columna $0$ o $n+1$}
 
-\textbf{Paso Inductivo:}  \\
-\underline{Hipótesis}: Hemos calculado correctamente los valores de \( OPT(f',c') \)
-donde \( f' \geq f+1 \) y \( c' \geq c+1 \).\\
+En estos casos, por definición de $OPT$ y de $T(n)$, los valores serán $-\infty$. Sin importar cómo se haya llegado a esas celdas, representan correctamente el hecho de que no son celdas válidas para realizar el recorrido.
 
-\underline{Tesis}: Podemos calcular correctamente el valor de \( OPT(f,c) \).\\
+\paragraph{Paso Inductivo}: \\
+\textbf{Hipótesis Inductiva:} Supongamos que los valores de $OPT(f+1,c)$ y $OPT(f,c+1)$ son correctos.\\
+\textbf{Tesis:} Se puede calcular el valor de $OPT(f,c)$ correctamente.
 
-\quad
+\textbf{Demostración:} 
 
-Demostración:
+Si $f = n$ y $c = n$, o $f = n+1$, o $c = n+1$, o $f = 0$, o $c = 0$, estamos en el caso base.
 
-Si \( f = n \) y \( c = n \), o \( f = n+1 \), o \( c = n+1 \), o \( f = 0 \), o \( c = 0 \), estamos en el caso base.
-
-En caso contrario, es decir, si \( 0 < f \leq n \) y \( 0 < c \leq n \),
-entonces, por la hipótesis inductiva, los valores de \( OPT(f+1, c) \) y \( OPT(f, c+1) \) han sido calculados correctamente
-en pasos anteriores. Resta probar que el valor de \( OPT(f, c) \) es correcto.
+En caso contrario, es decir, si $0 < f \leq n$ y $0 < c \leq n$, entonces, por la hipótesis inductiva, los valores de $OPT(f+1, c)$ y $OPT(f, c+1)$ han sido calculados correctamente en pasos anteriores. Resta probar que el valor de $OPT(f, c)$ es correcto.
 
 \[
-	OPT(f, c) = celda(f, c) + \max\left(OPT(f, c+1), OPT(f+1, c)\right)
+OPT(f, c) = celda(f, c) + \max\left(OPT(f, c+1), OPT(f+1, c)\right) 
 \]
 
-En cada $(f,c)$ que elija, debo decidir si moverme hacia abajo $(f+1)$ o hacia la derecha $(c+1)$.
-En el momento de elegir, puedo optar por el que alcance la mayor cantidad de celdas ocupadas,
-lo cual está representado por el $max$. Estos valores son correctos por hipótesis.
-Para calcular la cantidad total de celdas ocupadas alcanzadas,
-solo falta sumar el valor de la propia celda $(f,c)$, representada con $celda(f,c)$.
+En cada $(f,c)$ que elija, debo decidir si moverme hacia abajo $(f+1)$ o hacia la derecha $(c+1)$. En el momento de elegir, puedo optar por el que alcance la mayor cantidad de celdas ocupadas, lo cual está representado por el $\max$. Estos valores son correctos por hipótesis. Para calcular la cantidad total de celdas ocupadas alcanzadas, solo falta sumar el valor de la propia celda $(f,c)$, representada con $celda(f,c)$.
 
 \begin{itemize}
-	\item Si es una celda prohibida, se sumará $-\infty$, lo que resultará siempre en $-\infty$
-	      sin importar hacia qué lado me mueva, representando correctamente la imposibilidad de alcanzar
-	      celdas ocupadas desde esa posición.
-	\item Si la celda está libre, no se suma más celdas ocupadas a $OPT$, lo cual es correcto.
-	\item Si la celda está ocupada, se suma \( 1 \) al valor de $OPT$, representando una celda más que es posible alcanzar.
+    \item Si es una celda prohibida, se sumará $-\infty$, lo que resultará siempre en $-\infty$ sin importar hacia qué lado me mueva, representando correctamente la imposibilidad de alcanzar celdas ocupadas desde esa posición.
+    \item Si la celda está libre, no se suma más celdas ocupadas a $OPT$, lo cual es correcto.
+    \item Si la celda está ocupada, se suma $1$ al valor de $OPT$, representando una celda más que es posible alcanzar.
 \end{itemize}
 
-Por lo tanto, el resultado de \( OPT(f,c) \) es correcto en todos los casos.
-\newpage
+Por lo tanto, el resultado de $OPT(f,c)$ es correcto en todos los casos.
 
+\newpage
